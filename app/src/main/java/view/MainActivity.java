@@ -50,16 +50,16 @@ public class MainActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
         recyclerView = findViewById(R.id.list_tasks);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
         observeTask();
     }
 
-    private void observeTask(){
-        viewModel.tasks.observe(this, tasks->recyclerView.setAdapter(new TasksRecyclerViewAdapter(tasks)));
+    private void observeTask() {
+        viewModel.tasks.observe(this, tasks -> recyclerView.setAdapter(new TasksRecyclerViewAdapter(tasks)));
     }
 
-    private void initList(){
+    private void initList() {
         viewModel.initList();
     }
 
@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
                 dialogInterface.dismiss();
             }
             // If name has been set, but project has not been set (this should never occur)
-            else{
+            else {
                 dialogInterface.dismiss();
             }
         }
@@ -199,7 +199,6 @@ public class MainActivity extends AppCompatActivity {
             dialogSpinner.setAdapter(adapter);
         }
     }
-
 
 
 }
