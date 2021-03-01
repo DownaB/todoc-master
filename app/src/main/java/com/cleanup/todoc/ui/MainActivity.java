@@ -35,6 +35,8 @@ import java.util.Date;
  * @author Gaëtan HERFRAY
  */
 public class MainActivity extends AppCompatActivity implements TasksAdapter.DeleteTaskListener {
+    
+    private ArrayList<Task> tasks = new ArrayList<>();
 
     /**
      * The adapter which handles the list of tasks
@@ -217,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
                 }
                 adapter.updateTasks(tasks);
             }
-        };
+        });
     }
 
     /**

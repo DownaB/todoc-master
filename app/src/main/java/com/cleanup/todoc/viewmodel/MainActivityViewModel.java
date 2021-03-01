@@ -20,7 +20,7 @@ public class MainActivityViewModel extends ViewModel {
 
     @NonNull
     private final ArrayList<Task> _tasks = new ArrayList<>();
-    public MutableLiveData<ArrayList<Task>> tasks = new MutableLiveData<>;
+    public MutableLiveData<ArrayList<Task>> tasks = new MutableLiveData<>();
     @NonNull
     public SortMethod sortMethod = SortMethod.NONE;
 
@@ -56,10 +56,12 @@ public class MainActivityViewModel extends ViewModel {
     }
 
     public void onDeleteTask(Task task) {
+        _tasks.remove(task);
         updateTasks();
     }
 
     public void addTask(@NonNull Task task) {
+        _tasks.add(task);
         updateTasks();
     }
 
@@ -80,5 +82,5 @@ public class MainActivityViewModel extends ViewModel {
             }
             tasks.setValue(_tasks);
         }
-    }
 }
+
