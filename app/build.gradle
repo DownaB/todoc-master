@@ -40,4 +40,9 @@ dependencies {
 
     //LiveData
     implementation "androidx.lifecycle:lifecycle-livedata:2.3.0"
+
+    implementation "androidx.room:room-runtime:2.2.6"
+    annotationProcessor "androidx.room:room-compiler:2.2.6"
+
+
 }
