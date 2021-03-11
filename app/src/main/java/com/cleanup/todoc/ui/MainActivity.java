@@ -1,6 +1,7 @@
 package com.cleanup.todoc.ui;
 
 import android.content.DialogInterface;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -10,6 +11,12 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.PrimaryKey;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
+
+import com.cleanup.todoc.database.TaskDataBase;
 import com.cleanup.todoc.viewmodel.MainActivityViewModel;
 
 import android.view.Menu;
@@ -100,6 +107,25 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
                 showAddTaskDialog();
             }
         });
+
+        final TaskDataBase taskDataBase = Room.databaseBuilder(this,TaskDataBase.class, "database").allowMainThreadQueries()
+                .addCallback(new RoomDatabase.Callback() {
+            @Override
+            public void onCreate(@NonNull SupportSQLiteDatabase db) {
+                super.onCreate(db);
+
+                Project.getAllProjects();
+
+                for (int i = 0; i<Project[].length; i++) {
+
+                    db.execSQL ("INSERT INTO Project (PrimaryKey,name, color)");
+                    VALUES('Projet Tartampion', '0xFFEADAD1'),
+                            ('Projet Lucidia', '0xFFB4CDBA'),
+                    ('Projet Circus', '0xFFA3CED2')");
+                }
+            }
+        });
+
     }
 
     @Override

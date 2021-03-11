@@ -1,8 +1,7 @@
 package com.cleanup.todoc.dao;
 
-import com.cleanup.todoc.entity.Task;
+import com.cleanup.todoc.model.Task;
 
-import java.io.LineNumberInputStream;
 import java.util.List;
 
 import androidx.room.Dao;

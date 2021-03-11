@@ -1,20 +1,23 @@
 package com.cleanup.todoc.entity;
 
+import com.cleanup.todoc.model.Project;
+import com.cleanup.todoc.model.Task;
+
 import java.util.List;
 
 import androidx.room.Embedded;
 import androidx.room.Query;
 import androidx.room.Relation;
 
-final public class Task_Project {
+final public class TaskWithProject {
 
     @Embedded
     Project project;
 
     @Relation(
-            parentColumn = project "id",
-            entityColumn = task "projectId"
+            parentColumn = "id",
+            entityColumn = "projectId"
 
     )
-    List<Task> task;
+    Task task;
 }

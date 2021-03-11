@@ -2,13 +2,18 @@ package com.cleanup.todoc.model;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.PrimaryKey;
 
 import java.util.Comparator;
 
+@Entity (foreignKeys = {@ForeignKey(entity = com.cleanup.todoc.model.Project.class,parentColumns = "id",childColumns = "projectId", onDelete = ForeignKey.CASCADE)})
 public class Task {
     /**
      * The unique identifier of the task
      */
+    @PrimaryKey (autoGenerate = true)
     private long id;
 
     /**
