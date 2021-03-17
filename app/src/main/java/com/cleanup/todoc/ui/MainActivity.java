@@ -114,17 +114,12 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
             public void onCreate(@NonNull SupportSQLiteDatabase db) {
                 super.onCreate(db);
 
-                Project.getAllProjects();
+                for (Project allProject : Project.getAllProjects()) {
+                    db.execSQL ("INSERT INTO Project (id,name, color)VALUES("+allProject.getId()+",'"+allProject.getName()+"',"+allProject.getColor()+")");
 
-                for (int i = 0; i<Project[].length; i++) {
-
-                    db.execSQL ("INSERT INTO Project (PrimaryKey,name, color)");
-                    VALUES('Projet Tartampion', '0xFFEADAD1'),
-                            ('Projet Lucidia', '0xFFB4CDBA'),
-                    ('Projet Circus', '0xFFA3CED2')");
                 }
             }
-        });
+        }).build();
 
     }
 

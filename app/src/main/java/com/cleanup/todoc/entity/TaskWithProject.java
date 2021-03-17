@@ -12,12 +12,11 @@ import androidx.room.Relation;
 final public class TaskWithProject {
 
     @Embedded
-    Project project;
+    public Project project;
 
     @Relation(
             parentColumn = "id",
             entityColumn = "projectId"
 
-    )
-    Task task;
+    ) public Task task;
 }
