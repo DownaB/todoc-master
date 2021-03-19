@@ -2,27 +2,36 @@ package com.cleanup.todoc.viewmodel;
 
 
 
+import android.app.Application;
+
 import androidx.annotation.NonNull;
 
+import com.cleanup.todoc.database.TaskDataBase;
 import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 
-public class MainActivityViewModel extends ViewModel {
+public class MainActivityViewModel extends AndroidViewModel {
 
-    public final Project[] allProjects = Project.getAllProjects();
+    public final List<Project> allProjects = TaskDataBase.getTaskDatabase(getApplication()).projectDao().getAllProject();
 
     @NonNull
     private final ArrayList<Task> _tasks = new ArrayList<>();
     public MutableLiveData<ArrayList<Task>> tasks = new MutableLiveData<>();
     @NonNull
     public SortMethod sortMethod = SortMethod.NONE;
+
+    public MainActivityViewModel(@NonNull Application application) {
+        super(application);
+    }
 
     public void setSortMethod(@NonNull SortMethod sortMethod) {
         this.sortMethod = sortMethod;
@@ -58,11 +67,13 @@ public class MainActivityViewModel extends ViewModel {
     public void onDeleteTask(Task task) {
         _tasks.remove(task);
         updateTasks();
+        TaskDataBase.getTaskDatabase(getApplication()).taskDao().deleteTask(task);
     }
 
     public void addTask(@NonNull Task task) {
         _tasks.add(task);
         updateTasks();
+        TaskDataBase.getTaskDatabase(getApplication()).taskDao().addTask(task);
     }
 
     private void updateTasks() {

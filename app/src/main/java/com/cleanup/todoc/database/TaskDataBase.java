@@ -22,12 +22,20 @@ public abstract class TaskDataBase extends RoomDatabase {
 
     public static TaskDataBase getTaskDatabase(Context context){
         if (INSTANCE == null){
-        INSTANCE = Room.databaseBuilder(context.getApplicationContext(),TaskDataBase.class,"database").allowMainThreadQueries().build();
+        INSTANCE = Room.databaseBuilder(this,TaskDataBase.class, "database").allowMainThreadQueries()
+                .addCallback(new RoomDatabase.Callback() {
+                    @Override
+                    public void onCreate(@NonNull SupportSQLiteDatabase db) {
+                        super.onCreate(db);
+
+                        for (Project allProject : Project.getAllProjects()) {
+                            db.execSQL ("INSERT INTO Project (id,name, color)VALUES("+allProject.getId()+",'"+allProject.getName()+"',"+allProject.getColor()+")");
+
+                        }
+                    }
+                }).build();
     }
         return INSTANCE;
     }
-public static void destroyInstance(){
-        INSTANCE = null;
-}
 
 }

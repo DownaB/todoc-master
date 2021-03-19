@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
         listTasks.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         listTasks.setAdapter(adapter);
 
-        viewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
+        viewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory()).get(MainActivityViewModel.class);
         updateTasks();
 
         findViewById(R.id.fab_add_task).setOnClickListener(new View.OnClickListener() {
@@ -108,18 +108,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
             }
         });
 
-        final TaskDataBase taskDataBase = Room.databaseBuilder(this,TaskDataBase.class, "database").allowMainThreadQueries()
-                .addCallback(new RoomDatabase.Callback() {
-            @Override
-            public void onCreate(@NonNull SupportSQLiteDatabase db) {
-                super.onCreate(db);
-
-                for (Project allProject : Project.getAllProjects()) {
-                    db.execSQL ("INSERT INTO Project (id,name, color)VALUES("+allProject.getId()+",'"+allProject.getName()+"',"+allProject.getColor()+")");
-
-                }
-            }
-        }).build();
+        TaskDataBase.getTaskDatabase(this).projectDao().getAllProject();
 
     }
 
