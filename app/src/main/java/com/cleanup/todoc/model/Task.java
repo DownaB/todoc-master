@@ -9,18 +9,19 @@ import androidx.room.PrimaryKey;
 
 import java.util.Comparator;
 
-@Entity (foreignKeys = {@ForeignKey(entity = com.cleanup.todoc.model.Project.class,parentColumns = "id",childColumns = "projectId", onDelete = ForeignKey.CASCADE)})
+@Entity (foreignKeys = {@ForeignKey(entity = com.cleanup.todoc.model.Project.class,parentColumns = "id",childColumns = "projectId", onDelete = ForeignKey.CASCADE)},tableName = "Task")
 public class Task {
     /**
      * The unique identifier of the task
      */
     @PrimaryKey (autoGenerate = true)
+    @ColumnInfo(name="id")
     private long id;
 
     /**
      * The unique identifier of the project associated to the task
      */
-    @ColumnInfo(projectId= "project_id")
+    @ColumnInfo(name = "project_id")
     private long projectId;
 
     /**

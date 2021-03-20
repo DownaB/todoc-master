@@ -12,12 +12,13 @@ import androidx.room.PrimaryKey;
  *
  * @author Gaëtan HERFRAY
  */
-@Entity
+@Entity (tableName = "Project")
 public class Project {
     /**
      * The unique identifier of the project
      */
     @PrimaryKey
+    @ColumnInfo (name="id")
     private  long id;
 
     /**
@@ -31,7 +32,7 @@ public class Project {
      * The hex (ARGB) code of the color associated to the project
      */
     @ColorInt
-    @ColumnInfo(color= "color")
+    @ColumnInfo(name= "color")
     private int color;
 
     /**
