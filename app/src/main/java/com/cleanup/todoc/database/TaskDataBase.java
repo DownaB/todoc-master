@@ -22,7 +22,7 @@ public abstract class TaskDataBase extends RoomDatabase {
 
     public static TaskDataBase getTaskDatabase(Context context){
         if (INSTANCE == null){
-        INSTANCE = Room.databaseBuilder(this,TaskDataBase.class, "database").allowMainThreadQueries()
+        INSTANCE = Room.databaseBuilder(context,TaskDataBase.class, "database").allowMainThreadQueries()
                 .addCallback(new RoomDatabase.Callback() {
                     @Override
                     public void onCreate(@NonNull SupportSQLiteDatabase db) {

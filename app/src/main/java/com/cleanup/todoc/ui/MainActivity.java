@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
         listTasks.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         listTasks.setAdapter(adapter);
 
-        viewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory()).get(MainActivityViewModel.class);
+        viewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(MainActivityViewModel.class);
         updateTasks();
 
         findViewById(R.id.fab_add_task).setOnClickListener(new View.OnClickListener() {
