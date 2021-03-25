@@ -6,6 +6,8 @@ import com.cleanup.todoc.dao.ProjectDao;
 import com.cleanup.todoc.dao.TaskDao;
 import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
+import com.cleanup.todoc.ui.MainActivity;
+import com.cleanup.todoc.viewmodel.MainActivityViewModel;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -32,6 +34,8 @@ public abstract class TaskDataBase extends RoomDatabase {
                             db.execSQL ("INSERT INTO Project (id,name, color)VALUES("+allProject.getId()+",'"+allProject.getName()+"',"+allProject.getColor()+")");
 
                         }
+                        for (Task allTask : )
+                            db.execSQL("INSERT INTO Task (id,projectId,name) VALUES("+allTask.getId()+",'"+allTask.getProjectId()+"',"+allTask.getName()+")");
                     }
                 }).build();
     }

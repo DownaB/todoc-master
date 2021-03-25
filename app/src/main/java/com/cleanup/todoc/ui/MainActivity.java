@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
         });
 
         TaskDataBase.getTaskDatabase(this).projectDao().getAllProject();
+        TaskDataBase.getTaskDatabase(this).taskDao().getAllTask();
 
     }
 
