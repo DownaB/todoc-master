@@ -34,12 +34,9 @@ public abstract class TaskDataBase extends RoomDatabase {
                             db.execSQL ("INSERT INTO Project (id,name, color)VALUES("+allProject.getId()+",'"+allProject.getName()+"',"+allProject.getColor()+")");
 
                         }
-                        for (Task allTask : )
-                            db.execSQL("INSERT INTO Task (id,projectId,name) VALUES("+allTask.getId()+",'"+allTask.getProjectId()+"',"+allTask.getName()+")");
                     }
                 }).build();
     }
         return INSTANCE;
     }
-
 }

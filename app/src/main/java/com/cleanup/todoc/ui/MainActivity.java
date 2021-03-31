@@ -17,6 +17,7 @@ import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.cleanup.todoc.database.TaskDataBase;
+import com.cleanup.todoc.entity.TaskWithProject;
 import com.cleanup.todoc.viewmodel.MainActivityViewModel;
 
 import android.view.Menu;
@@ -42,8 +43,8 @@ import java.util.Date;
  * @author Gaëtan HERFRAY
  */
 public class MainActivity extends AppCompatActivity implements TasksAdapter.DeleteTaskListener {
-    
-    private ArrayList<Task> tasks = new ArrayList<>();
+
+    private ArrayList<TaskWithProject> tasks = new ArrayList<>();
 
     /**
      * The adapter which handles the list of tasks
@@ -137,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
     }
 
     @Override
-    public void onDeleteTask(Task task) {
+    public void onDeleteTask(TaskWithProject task) {
         viewModel.onDeleteTask(task);
     }
 
@@ -209,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
      *
      * @param task the task to be added to the list
      */
-    private void addTask(@NonNull Task task) {
+    private void addTask(@NonNull TaskWithProject task) {
         viewModel.addTask(task);
     }
 

@@ -7,6 +7,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 
 import com.cleanup.todoc.database.TaskDataBase;
+import com.cleanup.todoc.entity.TaskWithProject;
 import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
 
@@ -24,8 +25,8 @@ public class MainActivityViewModel extends AndroidViewModel {
     public final List<Project> allProjects = TaskDataBase.getTaskDatabase(getApplication()).projectDao().getAllProject();
 
     @NonNull
-    private final ArrayList<Task> _tasks = new ArrayList<>();
-    public MutableLiveData<ArrayList<Task>> tasks = new MutableLiveData<>();
+    private final ArrayList<TaskWithProject> _tasks = new ArrayList<>();
+    public MutableLiveData<ArrayList<TaskWithProject>> tasks = new MutableLiveData<>();
     @NonNull
     public SortMethod sortMethod = SortMethod.NONE;
 
@@ -64,13 +65,13 @@ public class MainActivityViewModel extends AndroidViewModel {
         NONE
     }
 
-    public void onDeleteTask(Task task) {
+    public void onDeleteTask(TaskWithProject task) {
         _tasks.remove(task);
         updateTasks();
         TaskDataBase.getTaskDatabase(getApplication()).taskDao().deleteTask(task);
     }
 
-    public void addTask(@NonNull Task task) {
+    public void addTask(@NonNull TaskWithProject task) {
         _tasks.add(task);
         updateTasks();
         TaskDataBase.getTaskDatabase(getApplication()).taskDao().addTask(task);
