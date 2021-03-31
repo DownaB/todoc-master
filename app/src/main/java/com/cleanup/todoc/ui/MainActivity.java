@@ -44,12 +44,11 @@ import java.util.Date;
  */
 public class MainActivity extends AppCompatActivity implements TasksAdapter.DeleteTaskListener {
 
-    private ArrayList<TaskWithProject> tasks = new ArrayList<>();
 
     /**
      * The adapter which handles the list of tasks
      */
-    private final TasksAdapter adapter = new TasksAdapter(tasks, this);
+    private final TasksAdapter adapter = new TasksAdapter(new ArrayList<>(), this);
 
     /**
      * Dialog to create a new task
@@ -108,9 +107,6 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
                 showAddTaskDialog();
             }
         });
-
-        TaskDataBase.getTaskDatabase(this).projectDao().getAllProject();
-        TaskDataBase.getTaskDatabase(this).taskDao().getAllTask();
 
     }
 
@@ -210,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
      *
      * @param task the task to be added to the list
      */
-    private void addTask(@NonNull TaskWithProject task) {
+    private void addTask(@NonNull Task task) {
         viewModel.addTask(task);
     }
 
@@ -218,9 +214,9 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
      * Updates the list of tasks in the UI
      */
     private void updateTasks() {
-        viewModel.tasks.observe(this, new Observer<ArrayList<Task>>() {
+        viewModel.tasks.observe(this, new Observer<ArrayList<TaskWithProject>>() {
             @Override
-            public void onChanged(ArrayList<Task> tasks) {
+            public void onChanged(ArrayList<TaskWithProject> tasks) {
                 if (tasks.size() == 0) {
                     lblNoTasks.setVisibility(View.VISIBLE);
                     listTasks.setVisibility(View.GONE);

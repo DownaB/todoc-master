@@ -147,10 +147,10 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
          * @param task the task to bind in the item view
          */
         void bind(TaskWithProject task) {
-            lblTaskName.setText(task.getName());
+            lblTaskName.setText(task.task.getName());
             imgDelete.setTag(task);
 
-            final Project taskProject = task.getProject();
+            final Project taskProject = task.project;
             if (taskProject != null) {
                 imgProject.setSupportImageTintList(ColorStateList.valueOf(taskProject.getColor()));
                 lblProjectName.setText(taskProject.getName());

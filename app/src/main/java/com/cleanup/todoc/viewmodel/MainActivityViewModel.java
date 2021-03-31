@@ -68,10 +68,10 @@ public class MainActivityViewModel extends AndroidViewModel {
     public void onDeleteTask(TaskWithProject task) {
         _tasks.remove(task);
         updateTasks();
-        TaskDataBase.getTaskDatabase(getApplication()).taskDao().deleteTask(task);
+        TaskDataBase.getTaskDatabase(getApplication()).taskDao().deleteTask(task.task);
     }
 
-    public void addTask(@NonNull TaskWithProject task) {
+    public void addTask(@NonNull Task task) {
         _tasks.add(task);
         updateTasks();
         TaskDataBase.getTaskDatabase(getApplication()).taskDao().addTask(task);
