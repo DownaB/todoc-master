@@ -6,6 +6,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 
+import com.cleanup.todoc.dao.ProjectDao;
 import com.cleanup.todoc.database.TaskDataBase;
 import com.cleanup.todoc.entity.TaskWithProject;
 import com.cleanup.todoc.model.Project;
@@ -15,8 +16,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import androidx.arch.core.util.Function;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 
@@ -25,8 +29,15 @@ public class MainActivityViewModel extends AndroidViewModel {
     public final List<Project> allProjects = TaskDataBase.getTaskDatabase(getApplication()).projectDao().getAllProject();
 
     @NonNull
-    private final ArrayList<TaskWithProject> _tasks = new ArrayList<>();
-    public MutableLiveData<ArrayList<TaskWithProject>> tasks = new MutableLiveData<>();
+    private LiveData<List<TaskWithProject>> tasks = TaskDataBase.getTaskDatabase(getApplication()).projectDao().getTaskWithProject();
+    public LiveData<List<TaskWithProject>> sortedTasks = Transformations.map(tasks, new Function<List<TaskWithProject>, List<TaskWithProject>>() {
+
+        @Override
+        public List<TaskWithProject> apply(List<TaskWithProject> input) {
+            return updateTasks(input);
+        }
+    });
+
     @NonNull
     public SortMethod sortMethod = SortMethod.NONE;
 
@@ -66,33 +77,29 @@ public class MainActivityViewModel extends AndroidViewModel {
     }
 
     public void onDeleteTask(TaskWithProject task) {
-        _tasks.remove(task);
-        updateTasks();
         TaskDataBase.getTaskDatabase(getApplication()).taskDao().deleteTask(task.task);
     }
 
     public void addTask(@NonNull Task task) {
-        _tasks.add(task);
-        updateTasks();
         TaskDataBase.getTaskDatabase(getApplication()).taskDao().addTask(task);
     }
 
-    private void updateTasks() {
+    private List<TaskWithProject> updateTasks(List<TaskWithProject> input) {
             switch (sortMethod) {
                 case ALPHABETICAL:
-                    Collections.sort(_tasks, new Task.TaskAZComparator());
+                    Collections.sort(input, new TaskWithProject.TaskAZComparator());
                     break;
                 case ALPHABETICAL_INVERTED:
-                    Collections.sort(_tasks, new Task.TaskZAComparator());
+                    Collections.sort(input, new TaskWithProject.TaskZAComparator());
                     break;
                 case RECENT_FIRST:
-                    Collections.sort(_tasks, new Task.TaskRecentComparator());
+                    Collections.sort(input, new TaskWithProject.TaskRecentComparator());
                     break;
                 case OLD_FIRST:
-                    Collections.sort(_tasks, new Task.TaskOldComparator());
+                    Collections.sort(input, new TaskWithProject.TaskOldComparator());
                     break;
             }
-            tasks.setValue(_tasks);
+            return input;
         }
 }
 
