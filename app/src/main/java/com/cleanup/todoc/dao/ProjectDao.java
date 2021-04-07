@@ -1,6 +1,5 @@
 package com.cleanup.todoc.dao;
 
-import com.cleanup.todoc.entity.TaskWithProject;
 import com.cleanup.todoc.model.Project;
 
 import java.util.List;
@@ -33,5 +32,5 @@ public interface ProjectDao {
 
     @Query("SELECT * FROM Project")
     @Transaction
-    LiveData<List<TaskWithProject>> getTaskWithProject();
+    List<Task> getTaskWithProject();
 }

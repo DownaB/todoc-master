@@ -1,7 +1,6 @@
 package com.cleanup.todoc.ui;
 
 import android.content.DialogInterface;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,13 +10,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.PrimaryKey;
-import androidx.room.Room;
-import androidx.room.RoomDatabase;
-import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.cleanup.todoc.database.TaskDataBase;
-import com.cleanup.todoc.entity.TaskWithProject;
 import com.cleanup.todoc.viewmodel.MainActivityViewModel;
 
 import android.view.Menu;
@@ -35,7 +28,6 @@ import com.cleanup.todoc.model.Task;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * <p>Home activity of the application which is displayed when the user opens the app.</p>
@@ -45,11 +37,12 @@ import java.util.List;
  */
 public class MainActivity extends AppCompatActivity implements TasksAdapter.DeleteTaskListener {
 
+    private ArrayList<Task> tasks = new ArrayList<>();
 
     /**
      * The adapter which handles the list of tasks
      */
-    private final TasksAdapter adapter = new TasksAdapter(new ArrayList<>(), this);
+    private final TasksAdapter adapter = new TasksAdapter(tasks, this);
 
     /**
      * Dialog to create a new task
@@ -135,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
     }
 
     @Override
-    public void onDeleteTask(TaskWithProject task) {
+    public void onDeleteTask(Task task) {
         viewModel.onDeleteTask(task);
     }
 
@@ -215,9 +208,9 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
      * Updates the list of tasks in the UI
      */
     private void updateTasks() {
-        viewModel.sortedTasks.observe(this, new Observer<List<TaskWithProject>>() {
+        viewModel.tasks.observe(this, new Observer<ArrayList<Task>>() {
             @Override
-            public void onChanged(List<TaskWithProject> tasks) {
+            public void onChanged(ArrayList<Task> tasks) {
                 if (tasks.size() == 0) {
                     lblNoTasks.setVisibility(View.VISIBLE);
                     listTasks.setVisibility(View.GONE);

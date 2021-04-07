@@ -6,9 +6,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 
-import com.cleanup.todoc.dao.ProjectDao;
 import com.cleanup.todoc.database.TaskDataBase;
-import com.cleanup.todoc.entity.TaskWithProject;
 import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
 
@@ -16,12 +14,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import androidx.arch.core.util.Function;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Transformations;
-import androidx.lifecycle.ViewModel;
 
 
 public class MainActivityViewModel extends AndroidViewModel {
@@ -29,15 +23,8 @@ public class MainActivityViewModel extends AndroidViewModel {
     public final List<Project> allProjects = TaskDataBase.getTaskDatabase(getApplication()).projectDao().getAllProject();
 
     @NonNull
-    private LiveData<List<TaskWithProject>> tasks = TaskDataBase.getTaskDatabase(getApplication()).projectDao().getTaskWithProject();
-    public LiveData<List<TaskWithProject>> sortedTasks = Transformations.map(tasks, new Function<List<TaskWithProject>, List<TaskWithProject>>() {
-
-        @Override
-        public List<TaskWithProject> apply(List<TaskWithProject> input) {
-            return updateTasks(input);
-        }
-    });
-
+    private final ArrayList<Task> _tasks = new ArrayList<>();
+    public MutableLiveData<ArrayList<Task>> tasks = new MutableLiveData<>();
     @NonNull
     public SortMethod sortMethod = SortMethod.NONE;
 
@@ -76,30 +63,34 @@ public class MainActivityViewModel extends AndroidViewModel {
         NONE
     }
 
-    public void onDeleteTask(TaskWithProject task) {
-        TaskDataBase.getTaskDatabase(getApplication()).taskDao().deleteTask(task.task);
+    public void onDeleteTask(Task task) {
+        _tasks.remove(task);
+        updateTasks();
+        TaskDataBase.getTaskDatabase(getApplication()).taskDao().deleteTask(task);
     }
 
     public void addTask(@NonNull Task task) {
+        _tasks.add(task);
+        updateTasks();
         TaskDataBase.getTaskDatabase(getApplication()).taskDao().addTask(task);
     }
 
-    private List<TaskWithProject> updateTasks(List<TaskWithProject> input) {
+    private void updateTasks() {
             switch (sortMethod) {
                 case ALPHABETICAL:
-                    Collections.sort(input, new TaskWithProject.TaskAZComparator());
+                    Collections.sort(_tasks, new Task.TaskAZComparator());
                     break;
                 case ALPHABETICAL_INVERTED:
-                    Collections.sort(input, new TaskWithProject.TaskZAComparator());
+                    Collections.sort(_tasks, new Task.TaskZAComparator());
                     break;
                 case RECENT_FIRST:
-                    Collections.sort(input, new TaskWithProject.TaskRecentComparator());
+                    Collections.sort(_tasks, new Task.TaskRecentComparator());
                     break;
                 case OLD_FIRST:
-                    Collections.sort(input, new TaskWithProject.TaskOldComparator());
+                    Collections.sort(_tasks, new Task.TaskOldComparator());
                     break;
             }
-            return input;
+            tasks.setValue(_tasks);
         }
 }
 
