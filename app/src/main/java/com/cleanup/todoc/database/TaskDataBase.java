@@ -31,7 +31,7 @@ public abstract class TaskDataBase extends RoomDatabase {
                         super.onCreate(db);
 
                         for (Project allProject : Project.getAllProjects()) {
-                            db.execSQL ("INSERT INTO Project (id,name, color)VALUES("+allProject.getId()+",'"+allProject.getName()+"',"+allProject.getColor()+")");
+                            db.execSQL ("INSERT INTO Project (projectId,projectName, color)VALUES("+allProject.getId()+",'"+allProject.getName()+"',"+allProject.getColor()+")");
 
                         }
                     }

@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 
@@ -24,7 +25,7 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     @NonNull
     private final ArrayList<Task> _tasks = new ArrayList<>();
-    public MutableLiveData<ArrayList<Task>> tasks = new MutableLiveData<>();
+    public LiveData<List<Task>> tasks = TaskDataBase.getTaskDatabase(getApplication()).taskDao().getAllTask();
     @NonNull
     public SortMethod sortMethod = SortMethod.NONE;
 

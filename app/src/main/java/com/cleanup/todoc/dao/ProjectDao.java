@@ -19,20 +19,6 @@ public interface ProjectDao {
     @Query("SELECT * FROM Project")
     List<Project> getAllProject();
 
-    @Delete
-    void deleteProject(Project project);
-
-    @Insert
-    void addProject (Project project);
-
-    @Update
-    void updateProject(Project project);
-
-    @Query("SELECT * FROM Project ORDER BY name ASC")
-    List<Project> taskByName();
-
-    @Query("SELECT * FROM Project")
-    @Transaction
-    List<Task> getTaskWithProject();
-
+    @Query("SELECT * FROM Project ORDER BY projectName ASC")
+    List<Project> projectByName();
 }

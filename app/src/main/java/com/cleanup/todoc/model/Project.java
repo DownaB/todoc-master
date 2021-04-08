@@ -18,14 +18,14 @@ public class Project {
      * The unique identifier of the project
      */
     @PrimaryKey
-    @ColumnInfo (name="id")
+    @ColumnInfo (name="projectId")
     private  long id;
 
     /**
      * The name of the project
      */
     @NonNull
-    @ColumnInfo(name= "name")
+    @ColumnInfo(name= "projectName")
     private  String name;
 
     /**
