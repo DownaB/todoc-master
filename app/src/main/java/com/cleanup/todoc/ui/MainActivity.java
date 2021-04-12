@@ -28,6 +28,7 @@ import com.cleanup.todoc.model.Task;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>Home activity of the application which is displayed when the user opens the app.</p>
@@ -205,18 +206,20 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
      * Updates the list of tasks in the UI
      */
     private void updateTasks() {
-        viewModel.tasks.observe(this, new Observer<ArrayList<Task>>() {
+        viewModel.sortedTask.observe(this, new Observer<List<Task>>() {
             @Override
-            public void onChanged(ArrayList<Task> tasks) {
-                if (tasks.size() == 0) {
-                    lblNoTasks.setVisibility(View.VISIBLE);
-                    listTasks.setVisibility(View.GONE);
-                } else {
-                    lblNoTasks.setVisibility(View.GONE);
-                    listTasks.setVisibility(View.VISIBLE);
+            public void onChanged(List<Task> tasks) {
+                if (tasks!= null) {
+                    if (tasks.size() == 0) {
+                        lblNoTasks.setVisibility(View.VISIBLE);
+                        listTasks.setVisibility(View.GONE);
+                    } else {
+                        lblNoTasks.setVisibility(View.GONE);
+                        listTasks.setVisibility(View.VISIBLE);
 
+                    }
+                    adapter.updateTasks(tasks);
                 }
-                adapter.updateTasks(tasks);
             }
         });
     }

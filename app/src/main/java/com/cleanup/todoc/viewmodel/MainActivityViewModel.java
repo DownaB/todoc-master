@@ -14,28 +14,45 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import androidx.arch.core.util.Function;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.Transformations;
 
 
 public class MainActivityViewModel extends AndroidViewModel {
 
     public final List<Project> allProjects = TaskDataBase.getTaskDatabase(getApplication()).projectDao().getAllProject();
+    public LiveData<List<Task>> tasks = TaskDataBase.getTaskDatabase(getApplication()).taskDao().getAllTask();
 
     @NonNull
-    private final ArrayList<Task> _tasks = new ArrayList<>();
-    public LiveData<List<Task>> tasks = TaskDataBase.getTaskDatabase(getApplication()).taskDao().getAllTask();
+    public MediatorLiveData<List<Task>> sortedTask = new MediatorLiveData<>();
+
     @NonNull
-    public SortMethod sortMethod = SortMethod.NONE;
+    private MutableLiveData<SortMethod> sortMethod = new MutableLiveData<>(SortMethod.NONE);
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
+        sortedTask.addSource(tasks, new Observer<List<Task>>() {
+            @Override
+            public void onChanged(List<Task> tasks) {
+                sortedTask.setValue(updateTasks(tasks));
+            }
+        });
+
+        sortedTask.addSource(sortMethod, new Observer<SortMethod>() {
+            @Override
+            public void onChanged(SortMethod sortMethod) {
+                sortedTask.setValue(updateTasks(tasks.getValue()));
+            }
+        });
     }
 
     public void setSortMethod(@NonNull SortMethod sortMethod) {
-        this.sortMethod = sortMethod;
-        updateTasks();
+        this.sortMethod.setValue(sortMethod);
     }
 
     /**
@@ -65,33 +82,29 @@ public class MainActivityViewModel extends AndroidViewModel {
     }
 
     public void onDeleteTask(Task task) {
-        _tasks.remove(task);
-        updateTasks();
         TaskDataBase.getTaskDatabase(getApplication()).taskDao().deleteTask(task);
     }
 
     public void addTask(@NonNull Task task) {
-        _tasks.add(task);
-        updateTasks();
         TaskDataBase.getTaskDatabase(getApplication()).taskDao().addTask(task);
     }
 
-    private void updateTasks() {
-            switch (sortMethod) {
+    private List<Task> updateTasks(List<Task> tasks) {
+            switch (sortMethod.getValue()) {
                 case ALPHABETICAL:
-                    Collections.sort(_tasks, new Task.TaskAZComparator());
+                    Collections.sort(tasks, new Task.TaskAZComparator());
                     break;
                 case ALPHABETICAL_INVERTED:
-                    Collections.sort(_tasks, new Task.TaskZAComparator());
+                    Collections.sort(tasks, new Task.TaskZAComparator());
                     break;
                 case RECENT_FIRST:
-                    Collections.sort(_tasks, new Task.TaskRecentComparator());
+                    Collections.sort(tasks, new Task.TaskRecentComparator());
                     break;
                 case OLD_FIRST:
-                    Collections.sort(_tasks, new Task.TaskOldComparator());
+                    Collections.sort(tasks, new Task.TaskOldComparator());
                     break;
             }
-            tasks.setValue(_tasks);
+            return tasks;
         }
 }
 
