@@ -1,16 +1,32 @@
 package com.cleanup.todoc;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
+import androidx.room.Room;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
+import com.cleanup.todoc.dao.ProjectDao;
+import com.cleanup.todoc.dao.TaskDao;
+import com.cleanup.todoc.database.TaskDataBase;
+import com.cleanup.todoc.model.Project;
+import com.cleanup.todoc.model.Task;
 import com.cleanup.todoc.ui.MainActivity;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.List;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -20,7 +36,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.cleanup.todoc.TestUtils.withRecyclerView;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -30,6 +48,9 @@ import static org.junit.Assert.assertThat;
  */
 @RunWith(AndroidJUnit4.class)
 public class MainActivityInstrumentedTest {
+    private ProjectDao projectDao;
+    private TaskDao taskDao;
+    private TaskDataBase taskDataBase;
     @Rule
     public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(MainActivity.class);
 
@@ -118,5 +139,52 @@ public class MainActivityInstrumentedTest {
                 .check(matches(withText("zzz Tâche example")));
         onView(withRecyclerView(R.id.list_tasks).atPositionOnView(2, R.id.lbl_task_name))
                 .check(matches(withText("aaa Tâche example")));
+    }
+ @Before
+ public void createDb(){
+     Context context = ApplicationProvider.getApplicationContext();
+     taskDataBase = Room.databaseBuilder(context,TaskDataBase.class,"database").build();
+     projectDao = taskDataBase.projectDao();
+     taskDao = taskDataBase.taskDao();
+ }
+ @After
+    public void closeDb(){
+        taskDataBase.close();
+ }
+
+    @Test
+    public void updateAllProject() {
+        List<Project> allProjects = projectDao.getAllProject();
+    }
+
+    @Test
+    public void addTask() throws Exception {
+        Project project;
+        Task task = new Task(1, Project.getProjectById(1),"test",1);
+        taskDao.addTask(task);
+        LiveData<List<Task>> allTask = taskDao.getAllTask();
+        assertEquals(allTask.get().getName(), task.getName());
+    }
+
+    @Test
+    public void deleteTask() throws Exception{
+        Task task = new Task (1, Project.getProjectById(1), "test",1);
+        taskDao.addTask(task);
+        LiveData<List<Task>> allTask = taskDao.getAllTask();
+        assertEquals(allTask.get(0).getName(), task.getName());
+        taskDao.deleteTask(task);
+        allTask = taskDao.getAllTask();
+        assertTrue(allTask.isEmpty());
+    }
+
+    @Test
+    public void updateAllTask() throws Exception {
+        Task task = new Task(1, Project.getProjectById(1), "test", 1);
+        taskDao.addTask(task);
+        Task task2 = new Task (2, Project.getProjectById(2), "test 2", 1);
+        taskDao.addTask(task2);
+        List <Task> allTask = LiveDataTestUtil.getValue(taskDao.getAllTask());
+        assertEquals(allTask.get(0).getName(), task.getName());
+        assertEquals(allTask.get(1).getName(), task2.getName());
     }
 }

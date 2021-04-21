@@ -19,6 +19,4 @@ public interface ProjectDao {
     @Query("SELECT * FROM Project")
     List<Project> getAllProject();
 
-    @Query("SELECT * FROM Project ORDER BY projectName ASC")
-    List<Project> projectByName();
 }

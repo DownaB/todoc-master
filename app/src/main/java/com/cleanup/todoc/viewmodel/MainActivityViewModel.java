@@ -26,6 +26,7 @@ import androidx.lifecycle.Transformations;
 public class MainActivityViewModel extends AndroidViewModel {
 
     public final List<Project> allProjects = TaskDataBase.getTaskDatabase(getApplication()).projectDao().getAllProject();
+
     public LiveData<List<Task>> tasks = TaskDataBase.getTaskDatabase(getApplication()).taskDao().getAllTask();
 
     @NonNull
