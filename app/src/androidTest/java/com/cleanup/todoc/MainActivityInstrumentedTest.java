@@ -48,9 +48,7 @@ import static org.junit.Assert.assertTrue;
  */
 @RunWith(AndroidJUnit4.class)
 public class MainActivityInstrumentedTest {
-    private ProjectDao projectDao;
-    private TaskDao taskDao;
-    private TaskDataBase taskDataBase;
+
     @Rule
     public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(MainActivity.class);
 
@@ -140,51 +138,5 @@ public class MainActivityInstrumentedTest {
         onView(withRecyclerView(R.id.list_tasks).atPositionOnView(2, R.id.lbl_task_name))
                 .check(matches(withText("aaa Tâche example")));
     }
- @Before
- public void createDb(){
-     Context context = ApplicationProvider.getApplicationContext();
-     taskDataBase = Room.databaseBuilder(context,TaskDataBase.class,"database").build();
-     projectDao = taskDataBase.projectDao();
-     taskDao = taskDataBase.taskDao();
- }
- @After
-    public void closeDb(){
-        taskDataBase.close();
- }
 
-    @Test
-    public void updateAllProject() {
-        List<Project> allProjects = projectDao.getAllProject();
-    }
-
-    @Test
-    public void addTask() throws Exception {
-        Project project;
-        Task task = new Task(1, Project.getProjectById(1),"test",1);
-        taskDao.addTask(task);
-        LiveData<List<Task>> allTask = taskDao.getAllTask();
-        assertEquals(allTask.get().getName(), task.getName());
-    }
-
-    @Test
-    public void deleteTask() throws Exception{
-        Task task = new Task (1, Project.getProjectById(1), "test",1);
-        taskDao.addTask(task);
-        LiveData<List<Task>> allTask = taskDao.getAllTask();
-        assertEquals(allTask.get(0).getName(), task.getName());
-        taskDao.deleteTask(task);
-        allTask = taskDao.getAllTask();
-        assertTrue(allTask.isEmpty());
-    }
-
-    @Test
-    public void updateAllTask() throws Exception {
-        Task task = new Task(1, Project.getProjectById(1), "test", 1);
-        taskDao.addTask(task);
-        Task task2 = new Task (2, Project.getProjectById(2), "test 2", 1);
-        taskDao.addTask(task2);
-        List <Task> allTask = LiveDataTestUtil.getValue(taskDao.getAllTask());
-        assertEquals(allTask.get(0).getName(), task.getName());
-        assertEquals(allTask.get(1).getName(), task2.getName());
-    }
 }

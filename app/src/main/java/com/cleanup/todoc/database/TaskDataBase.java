@@ -2,6 +2,7 @@ package com.cleanup.todoc.database;
 
 import android.content.Context;
 
+import com.cleanup.todoc.BuildConfig;
 import com.cleanup.todoc.dao.ProjectDao;
 import com.cleanup.todoc.dao.TaskDao;
 import com.cleanup.todoc.model.Project;
@@ -24,6 +25,7 @@ public abstract class TaskDataBase extends RoomDatabase {
 
     public static TaskDataBase getTaskDatabase(Context context){
         if (INSTANCE == null){
+            if (BuildConfig.IS_TESTING.get() == false)
         INSTANCE = Room.databaseBuilder(context,TaskDataBase.class, "database").allowMainThreadQueries()
                 .addCallback(new RoomDatabase.Callback() {
                     @Override
@@ -37,6 +39,22 @@ public abstract class TaskDataBase extends RoomDatabase {
                     }
                 }).build();
     }
+        else
+            {
+            INSTANCE = Room.inMemoryDatabaseBuilder(context,TaskDataBase.class).allowMainThreadQueries()
+                    .addCallback(new RoomDatabase.Callback() {
+                        @Override
+                        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+                            super.onCreate(db);
+
+                            for (Project allProject : Project.getAllProjects()) {
+                                db.execSQL ("INSERT INTO Project (projectId,projectName, color)VALUES("+allProject.getId()+",'"+allProject.getName()+"',"+allProject.getColor()+")");
+
+                            }
+                        }
+                    }).build();
+
+        }
         return INSTANCE;
     }
 }
