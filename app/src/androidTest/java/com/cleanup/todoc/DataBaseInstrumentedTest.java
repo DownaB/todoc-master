@@ -68,6 +68,8 @@ public class DataBaseInstrumentedTest {
         assertEquals(1,LiveDataTestUtil.getValue(tasks).size());
 
         TaskDataBase.getTaskDatabase(ApplicationProvider.getApplicationContext()).taskDao().deleteTask(task);
+        tasks = TaskDataBase.getTaskDatabase(ApplicationProvider.getApplicationContext()).taskDao().getAllTask();
+        assertEquals(0,LiveDataTestUtil.getValue(tasks).size());
     }
 
     @Test
@@ -99,6 +101,8 @@ public class DataBaseInstrumentedTest {
 
         TaskDataBase.getTaskDatabase(ApplicationProvider.getApplicationContext()).taskDao().deleteTask(task);
         TaskDataBase.getTaskDatabase(ApplicationProvider.getApplicationContext()).taskDao().deleteTask(task2);
+        tasks = TaskDataBase.getTaskDatabase(ApplicationProvider.getApplicationContext()).taskDao().getAllTask();
+        assertEquals(0,LiveDataTestUtil.getValue(tasks).size());
 
 
     }
