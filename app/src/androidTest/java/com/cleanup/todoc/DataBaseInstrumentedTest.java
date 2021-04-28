@@ -39,18 +39,6 @@ public class DataBaseInstrumentedTest {
     @Rule
     public InstantTaskExecutorRule instantExecutor = new InstantTaskExecutorRule();
 
-    @Before
-    public void createDb(){
-        Context context = ApplicationProvider.getApplicationContext();
-        taskDataBase = Room.inMemoryDatabaseBuilder(context, TaskDataBase.class).build();
-        projectDao = taskDataBase.projectDao();
-        taskDao = taskDataBase.taskDao();
-    }
-    @After
-    public void closeDb(){
-        taskDataBase.close();
-    }
-
     @Test
     public void getAllProject() {
         List<Project> allProjects = TaskDataBase.getTaskDatabase(ApplicationProvider.getApplicationContext()).projectDao().getAllProject();
@@ -96,6 +84,7 @@ public class DataBaseInstrumentedTest {
         Task task = new Task (1, Project.getProjectById(1), "test",1);
         Task task2 = new Task(2,Project.getProjectById(2),"test 2",1);
         TaskDataBase.getTaskDatabase(ApplicationProvider.getApplicationContext()).taskDao().addTask(task);
+        TaskDataBase.getTaskDatabase(ApplicationProvider.getApplicationContext()).taskDao().addTask(task2);
         tasks = TaskDataBase.getTaskDatabase(ApplicationProvider.getApplicationContext()).taskDao().getAllTask();
         assertEquals(2,LiveDataTestUtil.getValue(tasks).size());
 
