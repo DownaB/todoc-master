@@ -46,7 +46,7 @@ public class DataBaseInstrumentedTest {
     }
 
     @Test
-    public void addTask() throws InterruptedException {
+    public void addDeleteTask() throws InterruptedException {
         LiveData<List<Task>> tasks = TaskDataBase.getTaskDatabase(ApplicationProvider.getApplicationContext()).taskDao().getAllTask();
         assertEquals(0,LiveDataTestUtil.getValue(tasks).size());
 
@@ -58,22 +58,6 @@ public class DataBaseInstrumentedTest {
         TaskDataBase.getTaskDatabase(ApplicationProvider.getApplicationContext()).taskDao().deleteTask(task);
         tasks = TaskDataBase.getTaskDatabase(ApplicationProvider.getApplicationContext()).taskDao().getAllTask();
         assertEquals(0,LiveDataTestUtil.getValue(tasks).size());
-    }
-
-    @Test
-    public void deleteTask() throws Exception{
-        LiveData<List<Task>> tasks = TaskDataBase.getTaskDatabase(ApplicationProvider.getApplicationContext()).taskDao().getAllTask();
-        assertEquals(0,LiveDataTestUtil.getValue(tasks).size());
-
-        Task task = new Task (1, Project.getProjectById(1), "test",1);
-       TaskDataBase.getTaskDatabase(ApplicationProvider.getApplicationContext()).taskDao().addTask(task);
-       tasks = TaskDataBase.getTaskDatabase(ApplicationProvider.getApplicationContext()).taskDao().getAllTask();
-       assertEquals(1,LiveDataTestUtil.getValue(tasks).size());
-
-       TaskDataBase.getTaskDatabase(ApplicationProvider.getApplicationContext()).taskDao().deleteTask(task);
-       tasks=TaskDataBase.getTaskDatabase(ApplicationProvider.getApplicationContext()).taskDao().getAllTask();
-       assertEquals(0,LiveDataTestUtil.getValue(tasks).size());
-
     }
 
     @Test
