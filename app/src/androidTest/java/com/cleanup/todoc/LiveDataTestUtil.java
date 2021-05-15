@@ -8,8 +8,9 @@ import androidx.lifecycle.Observer;
 
 public class LiveDataTestUtil {
 
-    public static <T> T getValue(final LiveData<T> liveData) throws InterruptedException{
-        final Object [] data = new Object[1];
+    @SuppressWarnings("unchecked")
+    public static <T> T getValue(final LiveData<T> liveData) throws InterruptedException {
+        final Object[] data = new Object[1];
         final CountDownLatch latch = new CountDownLatch(1);
         Observer<T> observer = new Observer<T>() {
             @Override
@@ -21,6 +22,6 @@ public class LiveDataTestUtil {
         };
         liveData.observeForever(observer);
         latch.await(2, TimeUnit.SECONDS);
-        return (T) data [0];
+        return (T) data[0];
     }
 }

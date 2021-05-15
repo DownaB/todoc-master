@@ -39,6 +39,7 @@ public class MainActivityInstrumentedTest {
         BuildConfig.IS_TESTING.set(true);
     }
 
+    @SuppressWarnings("deprecation")
     @Rule
     public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(MainActivity.class);
 
