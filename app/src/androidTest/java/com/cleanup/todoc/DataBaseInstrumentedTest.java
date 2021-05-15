@@ -1,8 +1,6 @@
 package com.cleanup.todoc;
 
 
-import com.cleanup.todoc.dao.ProjectDao;
-import com.cleanup.todoc.dao.TaskDao;
 import com.cleanup.todoc.database.TaskDataBase;
 import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
@@ -23,16 +21,13 @@ import static org.junit.Assert.assertEquals;
 @RunWith(AndroidJUnit4.class)
 public class DataBaseInstrumentedTest {
 
-    private ProjectDao projectDao;
-    private TaskDao taskDao;
-    private TaskDataBase taskDataBase;
-
-    static{
+    static {
         BuildConfig.IS_TESTING.set(true);
     }
 
     @Rule
     public InstantTaskExecutorRule instantExecutor = new InstantTaskExecutorRule();
+
 
     @Test
     public void getAllProject() {

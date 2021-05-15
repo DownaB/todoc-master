@@ -18,13 +18,13 @@ import com.cleanup.todoc.viewmodel.MainActivityViewModel;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
+
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -93,12 +93,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
         viewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(MainActivityViewModel.class);
         updateTasks();
 
-        findViewById(R.id.fab_add_task).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showAddTaskDialog();
-            }
-        });
+        findViewById(R.id.fab_add_task).setOnClickListener(view -> showAddTaskDialog());
 
     }
 
@@ -203,20 +198,17 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
      * Updates the list of tasks in the UI
      */
     private void updateTasks() {
-        viewModel.sortedTask.observe(this, new Observer<List<Task>>() {
-            @Override
-            public void onChanged(List<Task> tasks) {
-                if (tasks != null) {
-                    if (tasks.size() == 0) {
-                        lblNoTasks.setVisibility(View.VISIBLE);
-                        listTasks.setVisibility(View.GONE);
-                    } else {
-                        lblNoTasks.setVisibility(View.GONE);
-                        listTasks.setVisibility(View.VISIBLE);
+        viewModel.sortedTask.observe(this, tasks -> {
+            if (tasks != null) {
+                if (tasks.size() == 0) {
+                    lblNoTasks.setVisibility(View.VISIBLE);
+                    listTasks.setVisibility(View.GONE);
+                } else {
+                    lblNoTasks.setVisibility(View.GONE);
+                    listTasks.setVisibility(View.VISIBLE);
 
-                    }
-                    adapter.updateTasks(tasks);
                 }
+                adapter.updateTasks(tasks);
             }
         });
     }

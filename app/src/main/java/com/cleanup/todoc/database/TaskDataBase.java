@@ -14,7 +14,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {Task.class, Project.class}, version = 1)
+@Database(entities = {Task.class, Project.class}, version = 1, exportSchema = false)
 public abstract class TaskDataBase extends RoomDatabase {
 
     private static TaskDataBase INSTANCE;

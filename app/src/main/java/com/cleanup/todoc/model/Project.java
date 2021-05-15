@@ -24,6 +24,7 @@ public class Project {
     /**
      * The name of the project
      */
+    @NonNull
     @ColumnInfo(name = "projectName")
     private String name;
 
@@ -32,7 +33,7 @@ public class Project {
      */
     @ColorInt
     @ColumnInfo(name = "color")
-    private int color;
+    private final int color;
 
     /**
      * Instantiates a new Project.
@@ -47,8 +48,6 @@ public class Project {
         this.color = color;
     }
 
-    public Project() {
-    }
 
     /**
      * Returns all the projects of the application.
@@ -115,10 +114,6 @@ public class Project {
     @ColorInt
     public int getColor() {
         return color;
-    }
-
-    public void setColor(int color) {
-        this.color = color;
     }
 
     @Override

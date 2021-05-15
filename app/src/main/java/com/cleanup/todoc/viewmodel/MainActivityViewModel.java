@@ -9,37 +9,30 @@ import com.cleanup.todoc.model.Task;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 
 
 public class MainActivityViewModel extends AndroidViewModel {
 
     public final List<Project> allProjects = TaskDataBase.getTaskDatabase(getApplication()).projectDao().getAllProject();
-
+    @NonNull
+    private final MutableLiveData<SortMethod> sortMethod = new MutableLiveData<>(SortMethod.NONE);
     public LiveData<List<Task>> tasks = TaskDataBase.getTaskDatabase(getApplication()).taskDao().getAllTask();
-
     @NonNull
     public MediatorLiveData<List<Task>> sortedTask = new MediatorLiveData<>();
 
-    @NonNull
-    private final MutableLiveData<SortMethod> sortMethod = new MutableLiveData<>(SortMethod.NONE);
-
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
-        sortedTask.addSource(tasks, new Observer<List<Task>>() {
-            @Override
-            public void onChanged(List<Task> tasks) {
-                sortedTask.setValue(updateTasks(tasks));
-            }
-        });
+        sortedTask.addSource(tasks, tasks -> sortedTask.setValue(updateTasks(tasks)));
 
-        sortedTask.addSource(sortMethod, sortMethod -> sortedTask.setValue(updateTasks(tasks.getValue())));
+        sortedTask.addSource(Objects.requireNonNull(sortMethod),
+                sortMethod -> sortedTask.setValue(updateTasks(tasks.getValue())));
     }
 
     public void setSortMethod(@NonNull SortMethod sortMethod) {
@@ -55,7 +48,7 @@ public class MainActivityViewModel extends AndroidViewModel {
     }
 
     private List<Task> updateTasks(List<Task> tasks) {
-        switch (sortMethod.getValue()) {
+        switch (Objects.requireNonNull(sortMethod.getValue())) {
             case ALPHABETICAL:
                 Collections.sort(tasks, new Task.TaskAZComparator());
                 break;

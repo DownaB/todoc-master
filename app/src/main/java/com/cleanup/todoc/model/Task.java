@@ -1,30 +1,37 @@
 package com.cleanup.todoc.model;
 
-import java.util.Comparator;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Embedded;
 import androidx.room.Entity;
+
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "Task")
+import androidx.room.RoomWarnings;
+
+import java.util.Comparator;
+
+@Entity (tableName = "Task")
 public class Task {
-    @Embedded
-    public Project project;
     /**
      * The unique identifier of the task
      */
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "taskId")
+    @PrimaryKey (autoGenerate = true)
+    @ColumnInfo(name="taskId")
     private long id;
+
     /**
      * The name of the task
      */
-    // Suppress warning because setName is called in constructor
-    @ColumnInfo(name = "taskName")
+    @NonNull
+    @ColumnInfo(name="taskName")
     private String name;
+
+    @SuppressWarnings(RoomWarnings.PRIMARY_KEY_FROM_EMBEDDED_IS_DROPPED)
+    @Embedded
+    public Project project;
+
     /**
      * The timestamp when the task has been created
      */
@@ -35,11 +42,11 @@ public class Task {
      * Instantiates a new Task.
      *
      * @param id                the unique identifier of the task to set
-     * @param project           the unique identifier of the project associated to the task to set
+     * @param project        the unique identifier of the project associated to the task to set
      * @param name              the name of the task to set
      * @param creationTimestamp the timestamp when the task has been created to set
      */
-    public Task(long id, Project project, @NonNull String name, long creationTimestamp) {
+    public Task(long id,Project project, @NonNull String name, long creationTimestamp) {
         this.setId(id);
         this.setProject(project);
         this.setName(name);
@@ -97,10 +104,6 @@ public class Task {
         this.name = name;
     }
 
-    public long getCreationTimestamp() {
-        return creationTimestamp;
-    }
-
     /**
      * Sets the timestamp when the task has been created.
      *
@@ -108,6 +111,10 @@ public class Task {
      */
     private void setCreationTimestamp(long creationTimestamp) {
         this.creationTimestamp = creationTimestamp;
+    }
+
+    public long getCreationTimestamp() {
+        return creationTimestamp;
     }
 
     /**

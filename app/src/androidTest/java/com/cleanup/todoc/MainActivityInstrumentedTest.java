@@ -10,7 +10,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Objects;
+
 import androidx.recyclerview.widget.RecyclerView;
+
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
@@ -54,7 +57,7 @@ public class MainActivityInstrumentedTest {
         // Check that recyclerView is displayed
         assertThat(listTasks.getVisibility(), equalTo(View.VISIBLE));
         // Check that it contains one element only
-        assertThat(listTasks.getAdapter().getItemCount(), equalTo(1));
+        assertThat(Objects.requireNonNull(listTasks.getAdapter()).getItemCount(), equalTo(1));
 
         onView(withId(R.id.img_delete)).perform(click());
 
