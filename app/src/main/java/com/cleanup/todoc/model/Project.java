@@ -12,27 +12,26 @@ import androidx.room.PrimaryKey;
  *
  * @author Gaëtan HERFRAY
  */
-@Entity (tableName = "Project")
+@Entity(tableName = "Project")
 public class Project {
     /**
      * The unique identifier of the project
      */
     @PrimaryKey
-    @ColumnInfo (name="projectId")
-    private  long id;
+    @ColumnInfo(name = "projectId")
+    private long id;
 
     /**
      * The name of the project
      */
-    @NonNull
-    @ColumnInfo(name= "projectName")
-    private  String name;
+    @ColumnInfo(name = "projectName")
+    private String name;
 
     /**
      * The hex (ARGB) code of the color associated to the project
      */
     @ColorInt
-    @ColumnInfo(name= "color")
+    @ColumnInfo(name = "color")
     private int color;
 
     /**
@@ -90,14 +89,8 @@ public class Project {
         return id;
     }
 
-    public void setId(long id){this.id = id;}
-
-    public void setName(@NonNull String name) {
-        this.name = name;
-    }
-
-    public void setColor(int color) {
-        this.color = color;
+    public void setId(long id) {
+        this.id = id;
     }
 
     /**
@@ -110,6 +103,10 @@ public class Project {
         return name;
     }
 
+    public void setName(@NonNull String name) {
+        this.name = name;
+    }
+
     /**
      * Returns the hex (ARGB) code of the color associated to the project.
      *
@@ -120,11 +117,14 @@ public class Project {
         return color;
     }
 
+    public void setColor(int color) {
+        this.color = color;
+    }
+
     @Override
     @NonNull
     public String toString() {
         return getName();
     }
-
 
 }

@@ -9,7 +9,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
-import androidx.room.Update;
+
 
 @Dao
 public interface TaskDao {
@@ -21,5 +21,5 @@ public interface TaskDao {
     void deleteTask(Task task);
 
     @Insert
-    void addTask (Task task);
+    void addTask(Task task);
 }

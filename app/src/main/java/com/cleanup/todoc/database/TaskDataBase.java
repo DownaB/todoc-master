@@ -7,8 +7,6 @@ import com.cleanup.todoc.dao.ProjectDao;
 import com.cleanup.todoc.dao.TaskDao;
 import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
-import com.cleanup.todoc.ui.MainActivity;
-import com.cleanup.todoc.viewmodel.MainActivityViewModel;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -19,15 +17,11 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 @Database(entities = {Task.class, Project.class}, version = 1)
 public abstract class TaskDataBase extends RoomDatabase {
 
-    public abstract TaskDao taskDao();
-
-    public abstract ProjectDao projectDao();
-
     private static TaskDataBase INSTANCE;
 
     public static TaskDataBase getTaskDatabase(Context context) {
         if (INSTANCE == null) {
-            if (BuildConfig.IS_TESTING.get() == false) {
+            if (!BuildConfig.IS_TESTING.get()) {
                 INSTANCE = Room.databaseBuilder(context, TaskDataBase.class, "database").allowMainThreadQueries()
                         .addCallback(new RoomDatabase.Callback() {
                             @Override
@@ -36,7 +30,6 @@ public abstract class TaskDataBase extends RoomDatabase {
 
                                 for (Project allProject : Project.getAllProjects()) {
                                     db.execSQL("INSERT INTO Project (projectId,projectName, color)VALUES(" + allProject.getId() + ",'" + allProject.getName() + "'," + allProject.getColor() + ")");
-
                                 }
                             }
                         }).build();
@@ -57,5 +50,9 @@ public abstract class TaskDataBase extends RoomDatabase {
         }
         return INSTANCE;
     }
+
+    public abstract TaskDao taskDao();
+
+    public abstract ProjectDao projectDao();
 }
 
