@@ -24,7 +24,6 @@ public class Task {
     /**
      * The name of the task
      */
-    @NonNull
     @ColumnInfo(name="taskName")
     private String name;
 
